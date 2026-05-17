@@ -3,195 +3,319 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<meta name="theme-color" content="#0a0a0a" />
+<meta name="theme-color" content="#050505" />
 <title>Josh Pratt — Blackline Detail</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-  :root {
-    --black: #0a0a0a;
-    --bone: #f4f2ed;
-    --silver: #8a8a8a;
-    --line: rgba(255,255,255,0.08);
-    --accent: #d4af37;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; }
+
   body {
-    background:var(--black);
-    color:var(--bone);
-    font-family:'Inter',sans-serif;
-    font-weight:300;
-    -webkit-font-smoothing:antialiased;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:2rem 1.25rem;
-  }
-  body::before {
-    content:'';
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:0;
-    opacity:0.04;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background: #050505;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem 1.25rem;
+    overflow-x: hidden;
   }
 
-  .card {
-    position:relative;
-    z-index:1;
-    width:100%;
-    max-width:400px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:0;
-    animation:fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  /* ── BACKGROUND ATMOSPHERE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 15%, rgba(255,255,255,0.035) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 85%, rgba(255,255,255,0.02) 0%, transparent 70%);
+    z-index: 0;
   }
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(18px); }
-    to   { opacity:1; transform:translateY(0); }
+
+  /* ── CAR OUTLINE WATERMARK ── */
+  .car-bg {
+    position: fixed;
+    bottom: -2%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(90vw, 520px);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+    filter: invert(1);
+  }
+
+  /* ── GLASS CARD ── */
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5rem 2rem 2rem;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.13);
+    box-shadow:
+      0 2px 0 0 rgba(255,255,255,0.12) inset,
+      0 32px 80px rgba(0,0,0,0.7),
+      0 8px 32px rgba(0,0,0,0.4);
+    animation: cardIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform: translateY(24px) scale(0.97); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  /* top shine line */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 12%; right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    border-radius: 50%;
+    pointer-events: none;
   }
 
   /* ── LOGO ── */
   .logo-wrap {
-    width:min(70vw, 240px);
-    margin-bottom:2rem;
+    width: min(78vw, 270px);
+    margin-bottom: 1.6rem;
+    animation: fadeDown 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+    filter: brightness(0) invert(1);
   }
   .logo-wrap img { width:100%; display:block; }
+  @keyframes fadeDown {
+    from { opacity:0; transform: translateY(-10px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
 
   /* ── DIVIDER ── */
   .divider {
-    width:48px;
-    height:1.5px;
-    background:linear-gradient(90deg, transparent, var(--accent), transparent);
-    margin-bottom:1.6rem;
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.25);
+    margin-bottom: 1.4rem;
+    animation: fadeDown 0.6s 0.25s both;
   }
 
   /* ── IDENTITY ── */
   .identity {
-    text-align:center;
-    margin-bottom:0.6rem;
+    text-align: center;
+    animation: fadeDown 0.7s 0.3s cubic-bezier(0.16,1,0.3,1) both;
   }
   .name {
-    font-family:'Syncopate', sans-serif;
-    font-weight:700;
-    font-size:clamp(1.15rem, 5vw, 1.5rem);
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--bone);
-    line-height:1.2;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.2;
   }
   .role {
-    font-family:'Cormorant Garamond', serif;
-    font-style:italic;
-    font-weight:300;
-    font-size:clamp(0.95rem, 3.5vw, 1.15rem);
-    color:var(--accent);
-    margin-top:0.4rem;
-    letter-spacing:0.04em;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.4rem;
+    letter-spacing: 0.04em;
   }
   .tagline {
-    font-size:0.72rem;
-    letter-spacing:0.2em;
-    text-transform:uppercase;
-    color:var(--silver);
-    margin-top:0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-top: 0.5rem;
   }
 
-  /* ── BUTTONS ── */
-  .actions {
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    gap:0.75rem;
-    margin-top:2rem;
+  /* ── SERVICE HOOK ── */
+  .service-hook {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    text-align: center;
+    margin-top: 0.7rem;
+    line-height: 2;
+    animation: fadeDown 0.7s 0.38s cubic-bezier(0.16,1,0.3,1) both;
   }
-  .btn {
-    display:flex;
-    align-items:center;
-    gap:1rem;
-    width:100%;
-    padding:1rem 1.25rem;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.03);
-    color:var(--bone);
-    text-decoration:none;
-    border-radius:2px;
-    font-family:'Inter', sans-serif;
-    font-size:0.8rem;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    cursor:pointer;
-    transition:all 0.3s cubic-bezier(0.77,0,0.175,1);
-    border-left:2px solid var(--accent);
-    position:relative;
-    overflow:hidden;
-  }
-  .btn::after {
-    content:'';
-    position:absolute;
-    inset:0;
-    background:linear-gradient(90deg, rgba(212,175,55,0.06), transparent);
-    opacity:0;
-    transition:opacity 0.3s;
-  }
-  .btn:hover::after, .btn:active::after { opacity:1; }
-  .btn:active { transform:scale(0.98); }
-  .btn-icon {
-    font-size:1.1rem;
-    flex-shrink:0;
-    width:24px;
-    text-align:center;
-  }
-  .btn-label { flex:1; }
 
-  .btn-primary {
-    background:var(--accent);
-    border:none;
-    border-left:none;
-    color:#0a0a0a;
-    font-weight:500;
+  /* ── BUBBLE BUTTONS ── */
+  .bubbles {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    width: 100%;
+    animation: bubblesIn 0.7s 0.45s cubic-bezier(0.16,1,0.3,1) both;
   }
-  .btn-primary::after { display:none; }
-  .btn-primary:hover { background:#c9a227; }
+  @keyframes bubblesIn {
+    from { opacity:0; transform: scale(0.85); }
+    to   { opacity:1; transform: scale(1); }
+  }
+
+  .bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+    cursor: pointer;
+    text-decoration: none;
+    background: none;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bubble-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.09);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.2) inset,
+      0 8px 24px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+    transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+  }
+  .bubble:hover .bubble-icon {
+    background: rgba(255,255,255,0.14);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 12px 32px rgba(0,0,0,0.4);
+    transform: translateY(-2px) scale(1.04);
+  }
+  .bubble:active .bubble-icon {
+    transform: scale(0.92);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .bubble-filled .bubble-icon {
+    background: #ffffff;
+    border-color: rgba(255,255,255,0.8);
+    color: #0a0a0a;
+    box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 12px 32px rgba(255,255,255,0.15);
+  }
+  .bubble-filled:hover .bubble-icon {
+    background: rgba(255,255,255,0.92);
+    transform: translateY(-2px) scale(1.04);
+  }
+  .bubble-filled:active .bubble-icon {
+    transform: scale(0.92);
+    background: rgba(255,255,255,0.8);
+  }
+
+  .bubble-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .bubble:hover .bubble-label { color: rgba(255,255,255,0.6); }
+
+  /* ── SEPARATOR ── */
+  .sep {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 1.8rem 0;
+  }
+
+  /* ── QR SECTION ── */
+  .qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    animation: fadeUp 0.7s 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(12px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .qr-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .qr-wrap {
+    padding: 12px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .qr-wrap:hover { transform: scale(1.03); }
+  #qrcode canvas { display:block; border-radius: 4px; }
+  .qr-sub {
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
 
   /* ── FOOTER ── */
   .card-footer {
-    margin-top:2.2rem;
-    text-align:center;
+    margin-top: 1.8rem;
+    text-align: center;
+    animation: fadeUp 0.6s 0.7s cubic-bezier(0.16,1,0.3,1) both;
   }
   .card-footer a {
-    font-size:0.68rem;
-    letter-spacing:0.2em;
-    text-transform:uppercase;
-    color:var(--silver);
-    text-decoration:none;
-    border-bottom:1px solid rgba(138,138,138,0.3);
-    padding-bottom:1px;
-    transition:color 0.3s;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    text-decoration: none;
+    transition: color 0.25s;
+    padding-bottom: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
-  .card-footer a:hover { color:var(--bone); }
+  .card-footer a:hover { color: rgba(255,255,255,0.55); }
   .copyright {
-    font-size:0.6rem;
-    color:rgba(138,138,138,0.45);
-    letter-spacing:0.12em;
-    margin-top:0.9rem;
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.14em;
+    margin-top: 0.8rem;
   }
-
-  /* ── QR CODE ── */
-  .qr-section { width:100%; margin-top:1.8rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; }
-  .qr-label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--silver); }
-  .qr-wrap { padding:14px; background:#f4f2ed; border:1px solid rgba(212,175,55,0.25); display:inline-block; }
-  #qrcode canvas { display:block; }
-  .qr-sub { font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(138,138,138,0.5); }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
+
+<!-- subtle car outline watermark in background -->
+<svg class="car-bg" viewBox="0 0 500 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M15,120 L15,90 Q20,85 35,72 L75,35 L195,18 L295,18 L355,45 Q385,52 410,78 L440,90 L455,95 L455,120 L420,120 A38,38 0 0 0 345,120 L148,120 A38,38 0 0 0 73,120 Z"
+        stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="73" cy="122" r="22" stroke="white" stroke-width="2.5"/>
+  <circle cx="73" cy="122" r="9" stroke="white" stroke-width="1.5"/>
+  <circle cx="382" cy="122" r="22" stroke="white" stroke-width="2.5"/>
+  <circle cx="382" cy="122" r="9" stroke="white" stroke-width="1.5"/>
+  <path d="M78,68 L115,28 L205,18 L205,65 Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M210,18 L295,18 L340,58 L210,60 Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+  <line x1="205" y1="18" x2="205" y2="65" stroke="white" stroke-width="1.5"/>
+</svg>
+
 <div class="card">
 
   <div class="logo-wrap">
@@ -203,27 +327,29 @@
   <div class="identity">
     <div class="name">Josh Pratt</div>
     <div class="role">Founder &middot; Blackline Detail</div>
-    <div class="tagline">Premium Mobile Detailing &middot; Denver Area</div>
+    <div class="tagline">Premium Mobile Detailing</div>
   </div>
 
-  <div class="actions">
+  <div class="service-hook">
+    Ceramic &middot; Correction &middot; Paint Protection &middot; Full Details
+  </div>
 
-    <a class="btn" href="tel:7208855927">
-      <span class="btn-icon">&#9990;</span>
-      <span class="btn-label">Call / Text</span>
+  <div class="bubbles">
+    <a class="bubble" href="tel:7208855927">
+      <div class="bubble-icon">&#9990;</div>
+      <div class="bubble-label">Call</div>
     </a>
-
-    <button class="btn" onclick="saveContact()">
-      <span class="btn-icon">&#10515;</span>
-      <span class="btn-label">Save Contact</span>
+    <button class="bubble" onclick="saveContact()">
+      <div class="bubble-icon">&#8675;</div>
+      <div class="bubble-label">Save</div>
     </button>
-
-    <a class="btn btn-primary" href="blackline-final.html#contact">
-      <span class="btn-icon">&#128197;</span>
-      <span class="btn-label">Book a Detail</span>
+    <a class="bubble bubble-filled" href="blackline-final.html#contact">
+      <div class="bubble-icon">&#10022;</div>
+      <div class="bubble-label">Book</div>
     </a>
-
   </div>
+
+  <div class="sep"></div>
 
   <div class="qr-section">
     <div class="qr-label">Scan to Share This Card</div>
@@ -252,30 +378,23 @@ function saveContact() {
     "URL:https://blacklinecardetail.com",
     "END:VCARD"
   ].join("\r\n");
-  var blob = new Blob([vcard], {type: "text/vcard;charset=utf-8"});
+  var blob = new Blob([vcard], {type:"text/vcard;charset=utf-8"});
   var url = URL.createObjectURL(blob);
   var a = document.createElement("a");
-  a.href = url;
-  a.download = "Josh-Pratt-Blackline.vcf";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = "Josh-Pratt-Blackline.vcf";
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
-// Generate QR code from the current page URL (works on any hosting)
+
 (function() {
   var url = window.location.href.split('?')[0];
   new QRCode(document.getElementById('qrcode'), {
-    text: url,
-    width: 160,
-    height: 160,
-    colorDark: '#0a0a0a',
-    colorLight: '#f4f2ed',
+    text: url, width:148, height:148,
+    colorDark:'#0a0a0a', colorLight:'#f5f3ee',
     correctLevel: QRCode.CorrectLevel.M
   });
 })();
 </script>
-<!-- NOTE: For the QR code to work as a shareable link, host this file online.
-     Easiest options: GitHub Pages (repo Settings → Pages) or netlify.com/drop -->
+<!-- Host on GitHub Pages or Netlify for the QR code to encode a real shareable URL -->
 </body>
 </html>
