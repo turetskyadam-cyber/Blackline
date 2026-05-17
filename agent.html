@@ -181,7 +181,15 @@
     letter-spacing:0.12em;
     margin-top:0.9rem;
   }
+
+  /* ── QR CODE ── */
+  .qr-section { width:100%; margin-top:1.8rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; }
+  .qr-label { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--silver); }
+  .qr-wrap { padding:14px; background:#f4f2ed; border:1px solid rgba(212,175,55,0.25); display:inline-block; }
+  #qrcode canvas { display:block; }
+  .qr-sub { font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(138,138,138,0.5); }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <div class="card">
@@ -217,6 +225,12 @@
 
   </div>
 
+  <div class="qr-section">
+    <div class="qr-label">Scan to Share This Card</div>
+    <div class="qr-wrap"><div id="qrcode"></div></div>
+    <div class="qr-sub">Point your camera at the code</div>
+  </div>
+
   <div class="card-footer">
     <a href="blackline-final.html">View Full Website &rarr;</a>
     <div class="copyright">&copy; Blackline Car Detail</div>
@@ -248,6 +262,20 @@ function saveContact() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+// Generate QR code from the current page URL (works on any hosting)
+(function() {
+  var url = window.location.href.split('?')[0];
+  new QRCode(document.getElementById('qrcode'), {
+    text: url,
+    width: 160,
+    height: 160,
+    colorDark: '#0a0a0a',
+    colorLight: '#f4f2ed',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+})();
 </script>
+<!-- NOTE: For the QR code to work as a shareable link, host this file online.
+     Easiest options: GitHub Pages (repo Settings → Pages) or netlify.com/drop -->
 </body>
 </html>
