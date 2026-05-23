@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { height:100%; }
@@ -372,44 +371,6 @@ body {
   margin: 1.1rem 0;
 }
 
-/* ── QR SECTION ── */
-.qr-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-  animation: fadeUp 0.7s 0.7s cubic-bezier(0.16,1,0.3,1) both;
-}
-.qr-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.32);
-}
-.qr-wrap {
-  padding: 13px;
-  background: rgba(245,243,238,0.96);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.6) inset,
-    0 8px 30px rgba(0,0,0,0.5),
-    0 2px 8px rgba(0,0,0,0.3);
-  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
-  cursor: pointer;
-}
-.qr-wrap:hover {
-  transform: scale(1.04) translateY(-2px);
-  box-shadow: 0 2px 0 rgba(255,255,255,0.6) inset, 0 16px 40px rgba(0,0,0,0.6);
-}
-#qrcode canvas { display:block; border-radius:4px; }
-.qr-sub {
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.17);
-}
-
 /* ── FOOTER ── */
 .card-footer {
   margin-top: 1rem;
@@ -438,6 +399,14 @@ body {
   from { opacity:0; transform:translateY(14px); }
   to   { opacity:1; transform:translateY(0); }
 }
+
+  /* ── PRICING ── */
+  .pricing { width:100%; animation:fadeUp 0.7s 0.65s cubic-bezier(0.16,1,0.3,1) both; }
+  .pricing-label { font-size:0.55rem; letter-spacing:0.28em; text-transform:uppercase; color:rgba(255,255,255,0.22); text-align:center; margin-bottom:0.7rem; }
+  .price-row { display:flex; justify-content:space-between; align-items:baseline; padding:0.5rem 0; border-bottom:1px solid rgba(255,255,255,0.055); }
+  .price-row:last-child { border-bottom:none; }
+  .price-name { font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.6); }
+  .price-val { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; color:rgba(255,255,255,0.5); white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -513,7 +482,7 @@ body {
         <div class="bubble-icon">&#8675;</div>
         <div class="bubble-label">Save</div>
       </button>
-      <a class="bubble bubble-filled" href="blackline-final.html#contact">
+      <a class="bubble bubble-filled" href="sms:7208855927&body=Hey%20Josh!%20I%27m%20interested%20in%20getting%20a%20quote%20for%20my%20vehicle.">
         <div class="bubble-icon">&#10022;</div>
         <div class="bubble-label">Book</div>
       </a>
@@ -521,9 +490,14 @@ body {
 
     <div class="sep"></div>
 
-    <div class="qr-section">
-      <div class="qr-label">Scan to Connect</div>
-      <div class="qr-wrap"><div id="qrcode"></div></div>
+    <div class="pricing">
+      <div class="pricing-label">Services &amp; Pricing</div>
+      <div class="price-row"><span class="price-name">Signature Wash</span><span class="price-val">From $120</span></div>
+      <div class="price-row"><span class="price-name">Interior Restore</span><span class="price-val">From $220</span></div>
+      <div class="price-row"><span class="price-name">Correction &amp; Polish</span><span class="price-val">From $450</span></div>
+      <div class="price-row"><span class="price-name">Ceramic Coating</span><span class="price-val">From $900</span></div>
+      <div class="price-row"><span class="price-name">The Blackline</span><span class="price-val">From $1,400</span></div>
+      <div class="price-row"><span class="price-name">Custom Package</span><span class="price-val">Quoted</span></div>
     </div>
 
     <div class="card-footer">
@@ -550,14 +524,7 @@ function saveContact() {
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
 }
-(function(){
-  var url = window.location.href.split('?')[0];
-  new QRCode(document.getElementById('qrcode'),{
-    text:url, width:155, height:155,
-    colorDark:'#0a0a0a', colorLight:'#f5f3ee',
-    correctLevel:QRCode.CorrectLevel.M
-  });
-})();
+
 </script>
 </body>
 </html>
